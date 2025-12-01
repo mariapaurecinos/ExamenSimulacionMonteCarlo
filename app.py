@@ -17,7 +17,7 @@ class MonteCarlo:
         self.resultado_integral = 0.0
 
     def funcion(self, x):
-        #defino el denominador 
+        #defino el denominador no lo hago con exp porque no puede ser tan grande 
         ax = abs(x)
         y = math.exp(-ax)
         y2 = y * y  
