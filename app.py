@@ -1,29 +1,79 @@
 import streamlit as st
 import pandas as pd
 import math
+import random
 
-import montecarlo.cpp 
 
-st.set_page_config(page_title="Monte Carlo C++", layout="wide")
-st.title("Integral por Monte Carlo usando clases en C++")
+class MonteCarlo:
+    def __init__(self, limite_inferior, limite_superior, tamano_muestra, opcion_funcion):
+        self.limite_inferior = limite_inferior
+        self.limite_superior = limite_superior
+        self.tamano_muestra = tamano_muestra
+        self.opcion_funcion = opcion_funcion
 
+        self.muestra_x = []
+        self.valores_funcion = []
+        self.resultado_integral = 0.0
+
+    def funcion(self, x):
+        ex = math.exp(x)
+        emx = math.exp(-x)
+        denominador = ex + emx
+
+        if self.opcion_funcion == 2:
+            return 2.0 / denominador
+        return 1.0 / denominador
+
+    def ejecutar_simulacion(self):
+        self.muestra_x.clear()
+        self.valores_funcion.clear()
+
+        filas = []
+
+        ancho = self.limite_superior - self.limite_inferior
+        PI = math.acos(-1.0)
+        coeficiente = 2.0 / PI
+
+        suma_acumulada = 0.0
+
+        for i in range(self.tamano_muestra):
+            x = random.uniform(self.limite_inferior, self.limite_superior)
+            fx = self.funcion(x)
+
+            self.muestra_x.append(x)
+            self.valores_funcion.append(fx)
+
+            altura = coeficiente * fx                        
+            area_i = ancho * altura / self.tamano_muestra 
+            suma_acumulada += area_i
+
+            filas.append({
+                "iteracion": i + 1,
+                "valor_aleatorio": x,
+                "altura": altura,
+                "area_aportada": area_i,
+                "estimacion_acumulada": suma_acumulada
+            })
+
+        self.resultado_integral = suma_acumulada
+        df = pd.DataFrame(filas)
+        return df, self.resultado_integral
+
+
+# Interfaz
+
+st.set_page_config(page_title="Monte Carlo Integral", layout="wide")
+st.title("Simulación de Monte Carlo")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    limite_inferior = st.number_input(
-        "Límite inferior (a)", value=-1.0, format="%.4f"
-    )
-
+    limite_inferior = st.number_input("Límite inferior (a)", value=-1.0, format="%.4f")
 with col2:
-    limite_superior = st.number_input(
-        "Límite superior (b)", value=1.0, format="%.4f"
-    )
-
+    limite_superior = st.number_input("Límite superior (b)", value=1.0, format="%.4f")
 with col3:
     tamano_muestra = st.number_input(
-        "Número de iteraciones (n)", min_value=1, max_value=1000000,
-        value=1000, step=1
+        "Número de iteraciones (n)", min_value=1, max_value=1000000, value=1000, step=1
     )
 
 opcion_texto = st.selectbox(
@@ -39,41 +89,20 @@ if st.button("Ejecutar simulación"):
     if limite_superior <= limite_inferior:
         st.error("El límite superior debe ser mayor que el límite inferior.")
     else:
-        mc = montecarlo_cpp.MonteCarlo()
-        mc.set_parametros(
-            float(limite_inferior),
-            float(limite_superior),
-            int(tamano_muestra),
-            int(opcion_funcion),
+        mc = MonteCarlo(
+            limite_inferior=float(limite_inferior),
+            limite_superior=float(limite_superior),
+            tamano_muestra=int(tamano_muestra),
+            opcion_funcion=opcion_funcion
         )
 
-        mc.ejecutar_simulacion()
-
-        xs = mc.get_muestra_x()
-        fxs = mc.get_valores_funcion()
-        resultado_final = mc.get_resultado_integral()
-
-        ancho = limite_superior - limite_inferior
-        factor = 2.0 / math.pi
-
-        alturas = [factor * fx for fx in fxs]
-        areas = [ancho * h / tamano_muestra for h in alturas]
-
-        estimacion_acum = []
-        s = 0.0
-        for a in areas:
-            s += a
-            estimacion_acum.append(s)
-
-        df = pd.DataFrame({
-            "valor_aleatorio": xs,
-            "altura": alturas,
-            "area": areas,
-            "estimacion_acumulada": estimacion_acum
-        })
+        tabla, estimacion_final = mc.ejecutar_simulacion()
 
         st.subheader("Tabla de iteraciones")
-        st.dataframe(df, use_container_width=True)
+        st.dataframe(tabla, use_container_width=True)
 
         st.subheader("Estimación final de la integral")
-        st.metric("Valor aproximado", f"{resultado_final:.6f}")
+        st.metric(
+            label="Valor aproximado",
+            value=f"{estimacion_final:.6f}"
+        )
