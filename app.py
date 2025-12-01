@@ -81,7 +81,7 @@ with col3:
     )
 
 opcion_texto = st.selectbox(
-    "Selecciona la función f(x) con la que buscas resolver la integral: ∫[a,b] * 2/pi * f(x) dx",
+    "Selecciona la función f(x) con la que buscas resolver la integral: ∫[a,b]  2/pi * f(x) dx",
     (
         "1) f(x) = 1 / (e^x + e^-x)",
         "2) f(x) = 2 / (e^x + e^-x)",
