@@ -5,7 +5,7 @@ import random
 
 
 class MonteCarlo:
-    #inicializo las clases
+    #inicializo los parametros
     def __init__(self, limite_inferior, limite_superior, tamano_muestra, opcion_funcion):
         self.limite_inferior = limite_inferior
         self.limite_superior = limite_superior
