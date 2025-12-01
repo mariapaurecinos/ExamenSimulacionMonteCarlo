@@ -18,14 +18,15 @@ class MonteCarlo:
 
     def funcion(self, x):
         #defino el denominador 
-        ex = math.exp(x)
-        emx = math.exp(-x)
-        denominador = ex + emx
+        ax = abs(x)
+        y = math.exp(-ax)
+        y2 = y * y  
+        base = y / (1.0 + y2) 
 
         #opciones de las funciones
         if self.opcion_funcion == 2:
-            return 2.0 / denominador
-        return 1.0 / denominador
+            return 2.0 * base
+        return 1.0 * base
 
     def ejecutar_simulacion(self):
         self.muestra_x.clear()
