@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import math
 
-import montecarlo_cpp 
+import montecarlo.cpp 
 
 st.set_page_config(page_title="Monte Carlo C++", layout="wide")
 st.title("Integral por Monte Carlo usando clases en C++")
