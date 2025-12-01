@@ -5,6 +5,7 @@ import random
 
 
 class MonteCarlo:
+    #inicializo las clases
     def __init__(self, limite_inferior, limite_superior, tamano_muestra, opcion_funcion):
         self.limite_inferior = limite_inferior
         self.limite_superior = limite_superior
@@ -16,10 +17,12 @@ class MonteCarlo:
         self.resultado_integral = 0.0
 
     def funcion(self, x):
+        #defino el denominador 
         ex = math.exp(x)
         emx = math.exp(-x)
         denominador = ex + emx
 
+        #opciones de las funciones
         if self.opcion_funcion == 2:
             return 2.0 / denominador
         return 1.0 / denominador
@@ -32,11 +35,12 @@ class MonteCarlo:
 
         ancho = self.limite_superior - self.limite_inferior
         PI = math.acos(-1.0)
-        coeficiente = 2.0 / PI
+        coeficiente = 2.0 / PI #lo que multiplica la funcion es constante
 
         suma_acumulada = 0.0
 
         for i in range(self.tamano_muestra):
+            #genero la variable aleatoria con distribucion uniforme y los limites de entrada
             x = random.uniform(self.limite_inferior, self.limite_superior)
             fx = self.funcion(x)
 
@@ -77,7 +81,7 @@ with col3:
     )
 
 opcion_texto = st.selectbox(
-    "Selecciona la función f(x)",
+    "Selecciona la función f(x) con la que buscas resolver la integral: ∫[a,b]*2/pi*f(x) dx",
     (
         "1) f(x) = 1 / (e^x + e^-x)",
         "2) f(x) = 2 / (e^x + e^-x)",
