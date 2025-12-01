@@ -72,9 +72,9 @@ st.title("Simulación de Monte Carlo")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    limite_inferior = st.number_input("Límite inferior (a)", value=-1.0, format="%.4f")
+    limite_inferior = st.number_input("Límite inferior (a)", value=-1.0, format="%.2f")
 with col2:
-    limite_superior = st.number_input("Límite superior (b)", value=1.0, format="%.4f")
+    limite_superior = st.number_input("Límite superior (b)", value=1.0, format="%.2f")
 with col3:
     tamano_muestra = st.number_input(
         "Número de iteraciones (n)", min_value=1, max_value=1000000, value=1000, step=1
