@@ -44,12 +44,13 @@ class MonteCarlo:
             x = random.uniform(self.limite_inferior, self.limite_superior)
             fx = self.funcion(x)
 
-            self.muestra_x.append(x)
-            self.valores_funcion.append(fx)
+            self.muestra_x.append(x) #agrego a la lista de valores aleatorios
+            self.valores_funcion.append(fx) #agrego a los valores por simulacion
 
             altura = coeficiente * fx                        
             area_i = ancho * altura / self.tamano_muestra 
             suma_acumulada += area_i
+
 
             filas.append({
                 "iteracion": i + 1,
