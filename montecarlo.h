@@ -15,6 +15,11 @@ class MonteCarlo : public Parametros {
         std::vector<double> desplegar_simulacion() const;
         void imprimir_resultados() const;
 
+        void set_parametros(double a, double b, int n, int opcion);
+        std::vector<double> get_muestra_x() const;
+        std::vector<double> get_valores_funcion() const;
+        double get_resultado_integral() const;
+
     private:
         std::vector<double> muestra_x;
         std::vector<double> valores_funcion;
